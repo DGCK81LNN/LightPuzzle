@@ -1,0 +1,78 @@
+<html>
+    <head>
+    <span class="sp">Width:</span><input type="text" id="width" /><br class="sp">
+    <span class="sp">Height:</span><input type="text" id="height" /><br class="sp">
+    <button id="yes" onclick="commit()" >yes</button><br class="sp">
+    <span id="warning" class="sp"></span>
+    </head>
+    <body>
+
+    </body>
+    <script>
+        var width;
+        var height;
+        var w = document.getElementById("width");
+        var h = document.getElementById("height");
+        var c = document.getElementById("yes");
+        var war = document.getElementById("warning");
+        var earr;
+        var sarr;
+        function commit(){
+            width = Number(w.value);
+            height = Number(h.value);
+            console.log(width);
+            console.log(height);
+            if(isNaN(width) || width <= 0 || isNaN(height) || height <= 0){
+                war.innerHTML = "Illegal value!";
+                return;
+            }
+            w.remove();
+            h.remove();
+            c.remove();
+            war.remove();
+            var l = document.getElementsByClassName("sp");
+            for(var i = 0; i < l.length; i++){
+                l[i].remove();
+            }
+            earr = new Array(width * height);
+            sarr = new Array(width * height);
+            for(var i = 0; i < sarr.length; i++){
+                sarr[i]=false;
+            }
+            for(var j = 0; j < height; j++){
+                for(var i = 0; i < width; i++){
+                    var sp = earr[i + j * width] = document.createElement("button");
+                    sp.style = "color:blue; font-size:160px;line-height:0.8;";
+                    sp.innerHTML = "■";
+                    sp.onclick = Function("light("+i+","+j+")");
+                    document.body.appendChild(sp);
+                }
+                document.body.appendChild(document.createElement("br"));
+            }
+        }
+        function light(i,j){
+            change(i,j);
+            if(i>0){
+                change(i-1,j);
+            }
+            if(i < width - 1){
+                change(i+1,j);
+            }
+            if(j>0){
+                change(i,j-1);
+            }
+            if(j < height - 1){
+                change(i,j+1);
+            }
+        };
+        function change(i,j){
+            if(sarr[i + j * width]){
+                sarr[i + j * width] = false;
+                earr[i + j * width].style = "color:blue; font-size:160px;line-height:0.8;";
+            } else {
+                sarr[i + j * width] = true;
+                earr[i + j * width].style = "color:red; font-size:160px;line-height:0.8;";
+            }
+        };
+    </script>
+</html>
