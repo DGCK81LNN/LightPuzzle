@@ -1,78 +1,101 @@
-<html>
+<!DOCTYPE HTML>
+<html lang=en>
     <head>
-    <span class="sp">Width:</span><input type="text" id="width" /><br class="sp">
-    <span class="sp">Height:</span><input type="text" id="height" /><br class="sp">
-    <button id="yes" onclick="commit()" >yes</button><br class="sp">
-    <span id="warning" class="sp"></span>
+        <meta charset=utf-8>
+        <mate name=viewport content="width=device-width,initial-scale=1,user-scalable=no">
+        <style>
+            input:invalid {
+                color: red;
+            }
+            #options:invalid button {
+                display: none;
+            }
+            .bulb {
+                appearance: none;
+                -webkit-appearance: none;
+                border: 1px solid black;
+                border-radius: 5em;
+                width: 6em;
+                height: 6em;
+                padding: 0;
+            }
+            .bulb-lit {
+                background-color: red;
+            }
+            table {
+                border-collapse: collapse;
+            }
+        </style>
     </head>
     <body>
-
-    </body>
+        <form id="options">
+            <div>
+                <label for="width">Width</span>
+                <input type=number min=1 step=1 required id="widthInp">
+            </div>
+            <div>
+                <label for="height">Height:</span>
+                <input type=number min=1 step=1 required id="heightInp">
+            </div>
+            <div>
+                <button>OK</button>
+            </div>
+        </form>
+        <table id="table"></table>
     <script>
-        var width;
-        var height;
-        var w = document.getElementById("width");
-        var h = document.getElementById("height");
-        var c = document.getElementById("yes");
-        var war = document.getElementById("warning");
-        var earr;
-        var sarr;
+        var width, height;
+        var options = document.getElementById("options"),
+            widthInp = document.getElementById("widthInp"),
+            heightInp = document.getElementById("heightInp"),
+            table = document.getElementById("table");
+        var earr, sarr;
+        options.onsubmit = function (event) {
+            event.preventDefault();
+            commit();
+        };
         function commit(){
-            width = Number(w.value);
-            height = Number(h.value);
+            width = Number(widthInp.value);
+            height = Number(heightInp.value);
             console.log(width);
             console.log(height);
-            if(isNaN(width) || width <= 0 || isNaN(height) || height <= 0){
-                war.innerHTML = "Illegal value!";
+            if (isNaN(width) || width <= 0 || (width | 0) != width ||
+                isNaN(height) || height <= 0 || (height | 0) != height) {
+                alert("Illegal value!");
                 return;
-            }
-            w.remove();
-            h.remove();
-            c.remove();
-            war.remove();
-            var l = document.getElementsByClassName("sp");
-            for(var i = 0; i < l.length; i++){
-                l[i].remove();
             }
             earr = new Array(width * height);
             sarr = new Array(width * height);
-            for(var i = 0; i < sarr.length; i++){
-                sarr[i]=false;
+            for (var i = 0; i < sarr.length; i++){
+                sarr[i] = false;
             }
-            for(var j = 0; j < height; j++){
-                for(var i = 0; i < width; i++){
+            table.textContent = "";
+            for (var j = 0; j < height; j++) {
+                var row = table.appendChild(document.createElement("tr"));
+                for (var i = 0; i < width; i++) {
                     var sp = earr[i + j * width] = document.createElement("button");
-                    sp.style = "color:blue; font-size:160px;line-height:0.8;";
-                    sp.innerHTML = "■";
-                    sp.onclick = Function("light("+i+","+j+")");
-                    document.body.appendChild(sp);
+                    sp.className = "bulb";
+                    sp.dataset.i = i, sp.dataset.j = j;
+                    sp.onclick = handleClick;
+                    row.appendChild(document.createElement("td")).appendChild(sp);
                 }
-                document.body.appendChild(document.createElement("br"));
             }
         }
-        function light(i,j){
-            change(i,j);
-            if(i>0){
-                change(i-1,j);
-            }
-            if(i < width - 1){
-                change(i+1,j);
-            }
-            if(j>0){
-                change(i,j-1);
-            }
-            if(j < height - 1){
-                change(i,j+1);
-            }
-        };
-        function change(i,j){
-            if(sarr[i + j * width]){
-                sarr[i + j * width] = false;
-                earr[i + j * width].style = "color:blue; font-size:160px;line-height:0.8;";
-            } else {
-                sarr[i + j * width] = true;
-                earr[i + j * width].style = "color:red; font-size:160px;line-height:0.8;";
-            }
-        };
+        function handleClick(event) {
+            light(Number(event.target.dataset.i), Number(event.target.dataset.j));
+        }
+        function light(i, j){
+            change(i, j);
+            if (i > 0) change(i - 1, j);
+            if (i < width - 1) change(i + 1, j);
+            if (j > 0) change(i, j - 1);
+            if (j < height - 1) change(i, j + 1);
+        }
+        function change(i, j){
+            var ij = i + j * width;
+            if (sarr[ij] = !sarr[ij])
+                earr[ij].classList.add("bulb-lit");
+            else earr[ij].classList.remove("bulb-lit");
+        }
     </script>
+    </body>
 </html>
