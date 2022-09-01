@@ -1,4 +1,4 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 
@@ -143,12 +143,6 @@ int main()
 
     if(rs == 0){
         solve(pMatrix, mw, size);
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
-                printf("%2d", pMatrix[(x + y * width) * mw + mw - 1]);
-            }
-            printf("\n");
-        }
     } else {
         mSolve(pMatrix, mw, size);
         if(checkPara(pMatrix, mw, size, pZeros, rs)){
@@ -159,12 +153,12 @@ int main()
         int idx;
         scanf("%d", &idx);
         mRead(pMatrix, pZeros, rs, idx, mw, size);
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                printf("%2d", pMatrix[(x + y * width) * mw + mw - 1]);
-            }
-            printf("\n");
+    }
+    for(int y = 0; y < height; y++){
+        for(int x = 0; x < width; x++){
+            printf("%c ", pMatrix[(x + y * width) * mw + mw - 1]?'X':'.');
         }
+        printf("\n");
     }
     return 0;
 }
